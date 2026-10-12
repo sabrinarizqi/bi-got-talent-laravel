@@ -19,13 +19,23 @@ Route::get('/dashboard', function () {
     return redirect()->route('siswa.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// 3. JALUR KHUSUS ADMIN (Dijaga oleh Middleware Role:admin)
+// 3. JALUR KHUSUS ADMIN
 Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Halaman Utama Admin
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    
+    // --- HALAMAN MENU BARU ---
+    Route::get('/admin/kelola-lomba', [AdminController::class, 'kelolaLomba'])->name('admin.lomba');
+    Route::get('/admin/kelola-siswa', [AdminController::class, 'kelolaSiswa'])->name('admin.siswa');
+    Route::get('/admin/kelola-status', [AdminController::class, 'kelolaStatus'])->name('admin.status');
+
+    // --- PROSES DATA (Tetap seperti sebelumnya) ---
     Route::post('/admin/lomba', [AdminController::class, 'storeLomba'])->name('admin.lomba.store');
     Route::post('/admin/pendaftaran/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.status.update');
+    Route::get('/admin/lomba/{id}/edit', [AdminController::class, 'editLomba'])->name('admin.lomba.edit');
+    Route::put('/admin/lomba/{id}', [AdminController::class, 'updateLomba'])->name('admin.lomba.update');
+    Route::delete('/admin/lomba/{id}', [AdminController::class, 'destroyLomba'])->name('admin.lomba.destroy');
 
-    // --- Rute CRUD Akun Siswa (Lengkap sesuai modul) ---
     Route::post('/admin/siswa', [AdminController::class, 'storeSiswa'])->name('admin.siswa.store');
     Route::get('/admin/siswa/{id}/edit', [AdminController::class, 'editSiswa'])->name('admin.siswa.edit');
     Route::put('/admin/siswa/{id}', [AdminController::class, 'updateSiswa'])->name('admin.siswa.update');

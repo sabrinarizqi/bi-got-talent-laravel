@@ -12,11 +12,24 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard') || request()->routeIs('siswa.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <!-- MENU KHUSUS ADMIN -->
+                    @if(Auth::user()->role === 'admin')
+                        <x-nav-link :href="route('admin.lomba')" :active="request()->routeIs('admin.lomba')">
+                            Kelola Lomba
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.siswa')" :active="request()->routeIs('admin.siswa')">
+                            Kelola Siswa
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.status')" :active="request()->routeIs('admin.status')">
+                            Manajemen Status
+                        </x-nav-link>
+                    @endif
                 </div>
-            </div>
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
